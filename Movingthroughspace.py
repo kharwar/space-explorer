@@ -48,7 +48,7 @@ class Game:
 
 
         #self.worlorm.setExit("east", self.lobby)
-     
+        self.worlorm.setExit("right", self.cybertron)
 
     def play(self):
         """

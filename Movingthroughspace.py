@@ -1,4 +1,4 @@
-from Room import Room
+from Planets import Planets
 from TextUI import TextUI
 
 """
@@ -25,7 +25,7 @@ class Game:
         Initialises the game
         """
         self.createPlanets()
-        self.currentRoom = self.outside
+        self.currentPlanets = self.worlorm
         self.textUI = TextUI()
 
     def createPlanets(self):
@@ -33,15 +33,15 @@ class Game:
             Sets up all Planets
         :return: None
         """
-        self.worlorm = Room("You are on the Worlorm Planet(Its a initial or Starting Point of the Game))")
-        self.cybertron=Room("These is a planet of Robots be Carefull and make friendship wisely")
-        self.ego = Room("These is a planet of a living tribual its not the safe planet")
-        self.krypton = Room("This planet is going to die soon")
-        self.solaris = Room("You have safely landed to Solaris")
-        self.titan = Room("This planet is where thanos lives")
-        self.dagobah = Room("This planet is well known planet of star Wars")
-        self.vormir = Room("This is the planet where you can get super powers")
-        self.knowhere = Room("This is the last planet where you can reach your destination")
+        self.worlorm = Planets("You are on the Worlorm Planet(Its a initial or Starting Point of the Game))")
+        self.cybertron=Planets("These is a planet of Robots be Carefull and make friendship wisely")
+        self.ego = Planets("These is a planet of a living tribual its not the safe planet")
+        self.krypton = Planets("This planet is going to die soon")
+        self.solaris = Planets("You have safely landed to Solaris")
+        self.titan = Planets("This planet is where thanos lives")
+        self.dagobah = Planets("This planet is well known planet of star Wars")
+        self.vormir = Planets("This is the planet where you can get super powers")
+        self.knowhere = Planets("This is the last planet where you can reach your destination")
 
         # Directions are up,left,right and south
         self.worlorm.setExit("right",self.cybertron)
@@ -51,8 +51,8 @@ class Game:
         self.ego.setExit("down",self.titan)
         self.cybertron.setExit("left",self.worlorm)
         self.cybertron.setExit("down",self.krypton)
-        self.cybertron.setExit("right",self.dogabah)
-        self.dagobah.setExit("left",self.cybertron)
+        self.cybertron.setExit("right",self.dagobah)
+        self.daggoobah.setExit("left",self.cybertron)
         self.dagobah.setExit("down",self.solaris)
         self.titan.setExit("up",self.ego)
         self.titan.setExit("right",self.vormir)
@@ -143,12 +143,12 @@ class Game:
             self.textUI.printtoTextUI("Go where?")
             return
 
-        nextRoom = self.currentRoom.getExit(secondWord)
-        if nextRoom == None:
+        nextPlanets = self.currentPlanets.getExit(secondWord)
+        if nextPlanets == None:
             self.textUI.printtoTextUI("There is no door!")
         else:
-            self.currentRoom = nextRoom
-            self.textUI.printtoTextUI(self.currentRoom.getLongDescription())
+            self.currentPlanets = nextPlanets
+            self.textUI.printtoTextUI(self.currentPlanets.getLongDescription())
 
 def main():
     game = Game()

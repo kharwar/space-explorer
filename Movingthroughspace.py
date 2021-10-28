@@ -34,23 +34,21 @@ class Game:
         :return: None
         """
         self.worlorm = Room("You are on the Worlorm Planet(Its a initial or Starting Point of the Game))")
-        self.Cybertron=Room
-        self.corridor = Room("in a corridor")
-        self.lab = Room("in a computing lab")
-        self.office = Room("in the computing admin office")
+        self.cybertron=Room("These is a planet of Robots be Carefull and make friendship wisely")
+        self.ego = Room("These is a planet of a living tribual its not the safe planet")
+        self.krypton = Room("This planet is going to die soon")
+        self.solaris = Room("You have safely landed to Solaris")
+        self.titan = Room("This planet is where thanos lives")
+        self.dagobah = Room("This planet is well known planet of star Wars")
+        self.vormir = Room("This is the planet where you can get super powers")
+        self.knowhere = Room("This is the last planet where you can reach your destination")
 
 
 
 
 
-        self.worlorm.setExit("east", self.lobby)
-        self.worlorm.setExit("south", self.lab)
-        self.worlorm.setExit("west", self.corridor)
-        self.lobby.setExit("west", self.worlorm)
-        self.corridor.setExit("east", self.worlorm)
-        self.lab.setExit("north", self.worlorm)
-        self.lab.setExit("east", self.office)
-        self.office.setExit("west", self.lab)
+        #self.worlorm.setExit("east", self.lobby)
+     
 
     def play(self):
         """

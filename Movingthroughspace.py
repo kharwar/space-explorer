@@ -43,12 +43,31 @@ class Game:
         self.vormir = Room("This is the planet where you can get super powers")
         self.knowhere = Room("This is the last planet where you can reach your destination")
 
-
-
-
-
-        #self.worlorm.setExit("east", self.lobby)
-        self.worlorm.setExit("right", self.cybertron)
+        # Directions are up,left,right and south
+        self.worlorm.setExit("right",self.cybertron)
+        self.worlorm.setExit("down",self.ego)
+        self.ego.setExit("up",self.worlorm)
+        self.ego.setExit("right",self.krypton)
+        self.ego.setExit("down",self.titan)
+        self.cybertron.setExit("left",self.worlorm)
+        self.cybertron.setExit("down",self.krypton)
+        self.cybertron.setExit("right",self.dogabah)
+        self.dagobah.setExit("left",self.cybertron)
+        self.dagobah.setExit("down",self.solaris)
+        self.titan.setExit("up",self.ego)
+        self.titan.setExit("right",self.vormir)
+        self.krypton.setExit("up",self.cybertron)
+        self.krypton.setExit("right",self.solaris)
+        self.krypton.setExit("down",self.vormir)
+        self.krypton.setExit("left",self.ego)
+        self.solaris.setExit("up",self.dagobah)
+        self.solaris.setExit("left",self.krypton)
+        self.solaris.setExit("down",self.knowhere)
+        self.vormir.setExit("up",self.krypton)
+        self.vormir.setExit("left",self.titan)
+        self.vormir.setExit("right",self.knowhere)
+        self.knowhere.setExit("up",self.solaris)
+        self.knowhere.setExit("left",self.vormir)
 
     def play(self):
         """

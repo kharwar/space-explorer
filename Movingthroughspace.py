@@ -1,80 +1,77 @@
-from Planets import Planets
+from Planet import Planet
 from TextUI import TextUI
 
 """
-    This class is the main class of the "Adventure World" application. 
-    'Adventure World' is a very simple, text based adventure game.  Users 
-    can walk around some scenery. That's all. It should really be extended 
-    to make it more interesting!
-    
+    This class is the main class of the "Space Explorer" application. 
+    'Space Explorer' is a very simple, text based adventure game.  
+
     To play this game, create an instance of this class and call the "play"
     method.
-
-    This main class creates and initialises all the others: it creates all
-    rooms, creates the parser and starts the game.  It also evaluates and
-    executes the commands that the parser returns.
-    
-    This game is adapted from the 'World of Zuul' by Michael Kolling
-    and David J. Barnes. The original was written in Java and has been
-    simplified and converted to Python by Kingsley Sage
 """
+
+
 class Game:
 
     def __init__(self):
         """
-        Initialises the game
+        Initializes the game
         """
         self.createPlanets()
-        self.currentPlanets = self.worlorm
+        self.currentPlanet = self.worlorm
         self.textUI = TextUI()
 
     def createPlanets(self):
         """
-            Sets up all Planets
+            Sets up all Planet
         :return: None
         """
-        self.worlorm = Planets("You are on the Worlorm Planet(Its a initial or Starting Point of the Game))")
-        self.cybertron=Planets("These is a planet of Robots be Carefull and make friendship wisely")
-        self.ego = Planets("These is a planet of a living tribual its not the safe planet")
-        self.krypton = Planets("This planet is going to die soon")
-        self.solaris = Planets("You have safely landed to Solaris")
-        self.titan = Planets("This planet is where thanos lives")
-        self.dagobah = Planets("This planet is well known planet of star Wars")
-        self.vormir = Planets("This is the planet where you can get super powers")
-        self.knowhere = Planets("This is the last planet where you can reach your destination")
+        self.worlorm = Planet("You are on the Worlorm Planet", "Worlorm")
+        self.cybertron = Planet(
+            "These is a planet of Robots be Carefull and make friendship wisely", "Cybertron")
+        self.ego = Planet(
+            "These is a planet of a living tribual its not the safe planet", "Ego")
+        self.krypton = Planet("This planet is going to die soon", "Krypton")
+        self.solaris = Planet("You have safely landed to Solaris", "Solaris")
+        self.titan = Planet("This planet is where thanos lives", "Titan")
+        self.dagobah = Planet(
+            "This planet is well known planet of star Wars", "Dagobah")
+        self.vormir = Planet(
+            "This is the planet where you can get super powers", "Vormir")
+        self.knowhere = Planet(
+            "This is the last planet where you can reach your destination", "Knowhere")
 
         # Directions are up,left,right and south
-        self.worlorm.setExit("right",self.cybertron)
-        self.worlorm.setExit("down",self.ego)
-        self.ego.setExit("up",self.worlorm)
-        self.ego.setExit("right",self.krypton)
-        self.ego.setExit("down",self.titan)
-        self.cybertron.setExit("left",self.worlorm)
-        self.cybertron.setExit("down",self.krypton)
-        self.cybertron.setExit("right",self.dagobah)
-        self.daggoobah.setExit("left",self.cybertron)
-        self.dagobah.setExit("down",self.solaris)
-        self.titan.setExit("up",self.ego)
-        self.titan.setExit("right",self.vormir)
-        self.krypton.setExit("up",self.cybertron)
-        self.krypton.setExit("right",self.solaris)
-        self.krypton.setExit("down",self.vormir)
-        self.krypton.setExit("left",self.ego)
-        self.solaris.setExit("up",self.dagobah)
-        self.solaris.setExit("left",self.krypton)
-        self.solaris.setExit("down",self.knowhere)
-        self.vormir.setExit("up",self.krypton)
-        self.vormir.setExit("left",self.titan)
-        self.vormir.setExit("right",self.knowhere)
-        self.knowhere.setExit("up",self.solaris)
-        self.knowhere.setExit("left",self.vormir)
+        self.worlorm.setExit("cybertron", self.cybertron)
+        self.worlorm.setExit("ego", self.ego)
+        self.ego.setExit("worlorm", self.worlorm)
+        self.ego.setExit("krypton", self.krypton)
+        self.ego.setExit("titan", self.titan)
+        self.cybertron.setExit("worlorm", self.worlorm)
+        self.cybertron.setExit("krypton", self.krypton)
+        self.cybertron.setExit("dagobah", self.dagobah)
+        self.dagobah.setExit("cybertron", self.cybertron)
+        self.dagobah.setExit("solaris", self.solaris)
+        self.titan.setExit("ego", self.ego)
+        self.titan.setExit("vormir", self.vormir)
+        self.krypton.setExit("cybertron", self.cybertron)
+        self.krypton.setExit("solaris", self.solaris)
+        self.krypton.setExit("vormir", self.vormir)
+        self.krypton.setExit("ego", self.ego)
+        self.solaris.setExit("dagobah", self.dagobah)
+        self.solaris.setExit("krypton", self.krypton)
+        self.solaris.setExit("down", self.knowhere)
+        self.vormir.setExit("knowhere", self.krypton)
+        self.vormir.setExit("titan", self.titan)
+        self.vormir.setExit("knowhere", self.knowhere)
+        self.knowhere.setExit("solaris", self.solaris)
+        self.knowhere.setExit("vormir", self.vormir)
 
     def play(self):
         """
             The main play loop
         :return: None
         """
-        self.printWelcome()
+        self.doPrintHelp()
         finished = False
         while (finished == False):
             command = self.textUI.getCommand()      # Returns a 2-tuple
@@ -82,15 +79,23 @@ class Game:
 
         print("Thank you for playing!")
 
-    def printWelcome(self):
+    def doPrintHelp(self):
         """
             Displays a welcome message
         :return:
         """
-        self.textUI.printtoTextUI("You are lost. You are alone. You wander")
-        self.textUI.printtoTextUI("around the deserted complex.")
+        self.textUI.printtoTextUI(
+            f'You are on Planet {self.currentPlanet.getName()}. You are alone. You wander')
+        self.textUI.printtoTextUI(
+            "around the vast void of universe traversing through different planets.")
+        self.textUI.printtoTextUI("Your task is to find the Metaverse orb")
+        self.textUI.printtoTextUI(
+            "which can be found on any of the planets in the universe. All you need to do is EXPLORE!")
         self.textUI.printtoTextUI("")
-        self.textUI.printtoTextUI(f'Your command words are: {self.showCommandWords()}')
+        self.textUI.printtoTextUI(
+            f'Your command words are: {self.showCommandWords()}')
+        self.textUI.printtoTextUI(
+            f'Your exits are: {self.currentPlanet.getExits()}')
 
     def showCommandWords(self):
         """
@@ -109,28 +114,18 @@ class Game:
         if commandWord != None:
             commandWord = commandWord.upper()
 
-        wantToQuit = False
+        endGame = False
         if commandWord == "HELP":
             self.doPrintHelp()
         elif commandWord == "GO":
-            self.doGoCommand(secondWord)
+            endGame = self.doGoCommand(secondWord)
         elif commandWord == "QUIT":
-            wantToQuit = True
+            endGame = True
         else:
             # Unknown command ...
             self.textUI.printtoTextUI("Don't know what you mean")
 
-        return wantToQuit
-
-    def doPrintHelp(self):
-        """
-            Display some useful help text
-        :return: None
-        """
-        self.textUI.printtoTextUI("You are lost. You are alone. You wander")
-        self.textUI.printtoTextUI("around the deserted complex.")
-        self.textUI.printtoTextUI("")
-        self.textUI.printtoTextUI(f'Your command words are: {self.showCommandWords()}')
+        return endGame
 
     def doGoCommand(self, secondWord):
         """
@@ -142,17 +137,24 @@ class Game:
             # Missing second word ...
             self.textUI.printtoTextUI("Go where?")
             return
-
-        nextPlanets = self.currentPlanets.getExit(secondWord)
-        if nextPlanets == None:
+        endGame = False
+        nextPlanet = self.currentPlanet.getExit(secondWord)
+        if nextPlanet == None:
             self.textUI.printtoTextUI("There is no door!")
         else:
-            self.currentPlanets = nextPlanets
-            self.textUI.printtoTextUI(self.currentPlanets.getLongDescription())
+            self.currentPlanet = nextPlanet
+            self.textUI.printtoTextUI(self.currentPlanet.getLongDescription())
+            # print(type(nextPlanet))
+            if self.currentPlanet.getName() == "knowhere":
+                self.textUI.printtoTextUI('You have found the Metaverse Orb.')
+                endGame = True
+        return endGame
+
 
 def main():
     game = Game()
     game.play()
+
 
 if __name__ == "__main__":
     main()

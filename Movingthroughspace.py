@@ -144,8 +144,7 @@ class Game:
         else:
             self.currentPlanet = nextPlanet
             self.textUI.printtoTextUI(self.currentPlanet.getLongDescription())
-            # print(type(nextPlanet))
-            if self.currentPlanet.getName() == "knowhere":
+            if self.currentPlanet.getName() == "Knowhere":
                 self.textUI.printtoTextUI('You have found the Metaverse Orb.')
                 endGame = True
         return endGame

@@ -31,19 +31,19 @@ class Game:
         self.worlorm = Planet(
             "You are on the Worlorm Planet", "Worlorm", [], 0)
         self.cybertron = Planet(
-            "These is a planet of Robots be Carefull and make friendship wisely", "Cybertron", [], 0)
+            "These is a planet of Robots be Carefull and make friendship wisely", "Cybertron", [], 1)
         self.ego = Planet(
             "These is a planet of a living tribual its not the safe planet", "Ego", [], 0)
         self.krypton = Planet(
             "This planet is going to die soon", "Krypton", [], 1)
         self.solaris = Planet(
-            "You have safely landed to Solaris", "Solaris", [], 0)
+            "You have safely landed to Solaris", "Solaris", [], 1)
         self.titan = Planet(
-            "This planet is where thanos lives", "Titan", [], 0)
+            "This planet is where thanos lives", "Titan", ["starsaber"], 1)
         self.dagobah = Planet(
-            "This planet is well known planet of star Wars", "Dagobah", [], 0)
+            "This planet is well known planet of star Wars", "Dagobah", [], -2)
         self.vormir = Planet(
-            "This is the planet where you can get super powers", "Vormir", ["key"], 1)
+            "This is the planet where you can get super powers", "Vormir", ["key"], 2)
         self.knowhere = Planet(
             "This is the home of the mining colony of Exitar.", "Knowhere", [], 0)
         self.earth = Planet(
@@ -51,9 +51,9 @@ class Game:
         self.xander = Planet(
             "", "Xander", [], 0)
         self.asgard = Planet(
-            "", "Asgard", [], 0)
+            "", "Asgard", [], 1)
         self.pluto = Planet(
-            "", "Pluto", ["orbHolder"], 0
+            "", "Pluto", ["orbHolder"], 2
         )
 
         self.worlorm.setExit("cybertron", self.cybertron)
@@ -188,7 +188,9 @@ class Game:
                 if allowedToEnter:
                     self.currentPlanet = nextPlanet
                     hops = self.currentPlanet.hops
-                    if hops != 0:
+                    
+                    
+                    if hops > 0:
                         self.ship.addHops(hops)
                         self.textUI.printtoTextUI(
                             f"\nFuel found. {hops} hop/s added.")
@@ -207,6 +209,18 @@ class Game:
                                 self.ship.addItem(i)
                     self.textUI.printtoTextUI(
                         self.currentPlanet.getLongDescription())
+                    if(self.currentPlanet.getName() == "Dagobah"):
+                        self.textUI.printtoTextUI("Careful you are attack by Darth Vader! Take out your starsaber.")
+                        if "starsaber" in self.ship.inventory:
+                            self.textUI.printtoTextUI("You successfully invade Dark Vader attack.")
+                            self.ship.inventory.remove("starsaber")
+                        else:
+                            self.textUI.printtoTextUI(f"Oh no! You don't have starsaber you lost hops.")
+                            self.ship.addHops(hops)
+                            if self.ship.hops > 0:
+                                self.textUI.printtoTextUI(f'You have {self.ship.hops} hops remaining!')
+                            else:
+                                endGame = True
                     if self.currentPlanet.getName() == "Earth":
                         self.textUI.printtoTextUI(
                             'You have found the Metaverse Orb.')

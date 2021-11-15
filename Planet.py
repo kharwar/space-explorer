@@ -31,7 +31,7 @@ class Planet:
         return self.name
 
     def getLongDescription(self):
-        return f'Location: {self.description}, Exits: {self.getExits()} '
+        return f'\nLocation: {self.description}\nYour exits: {self.getExits()} '
 
     def getExits(self):
 

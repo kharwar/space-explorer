@@ -3,8 +3,8 @@ from Ship import Ship
 from TextUI import TextUI
 
 """
-    This class is the main class of the "Space Explorer" application. 
-    'Space Explorer' is a very simple, text based adventure game.  
+    This class is the main class of the "Space Explorer" application.
+    'Space Explorer' is a very simple, text based adventure game.
 
     To play this game, create an instance of this class and call the "play"
     method.
@@ -43,7 +43,7 @@ class Game:
         self.dagobah = Planet(
             "This planet is well known planet of star Wars", "Dagobah", [], 0)
         self.vormir = Planet(
-            "This is the planet where you can get super powers", "Vormir", [], 1)
+            "This is the planet where you can get super powers", "Vormir", ["key"], 1)
         self.knowhere = Planet(
             "This is the home of the mining colony of Exitar.", "Knowhere", [], 0)
         self.earth = Planet(
@@ -92,6 +92,13 @@ class Game:
         self.xander.setExit("earth", self.earth)
         self.earth.setExit("knowhere", self.knowhere)
         self.earth.setExit("xander", self.xander)
+
+    def canEnter(self, planetKey, items):
+        if self.currentPlanet.getExit(planetKey):
+            for item in items:
+                if item not in self.ship.inventory:
+                    return False
+        return True
 
     def play(self):
         """
@@ -160,6 +167,8 @@ class Game:
         :param secondWord: the direction the player wishes to travel in
         :return: None
         """
+
+        requiredItems = {"Earth": ["orbHolder"], "Pluto": ["key"]}
         if secondWord == None:
             # Missing second word ...
             self.textUI.printtoTextUI("Go where?")
@@ -174,52 +183,39 @@ class Game:
                 self.textUI.printtoTextUI("You don't have any hops left!")
                 endGame = True
             else:
-                if nextPlanet.name == "Pluto":
-                    if "key" in self.ship.inventory:
+                allowedToEnter = self.canEnter(
+                    "earth", ["orbHolder"]) and self.canEnter("pluto", ["key"])
+                if allowedToEnter:
+                    self.currentPlanet = nextPlanet
+                    hops = self.currentPlanet.hops
+                    if hops != 0:
+                        self.ship.addHops(hops)
                         self.textUI.printtoTextUI(
-                            f'You have {self.ship.hops} hops remaining!')
-                        self.currentPlanet = nextPlanet
-                        self.textUI.printtoTextUI(
-                            self.currentPlanet.getLongDescription())
-                        self.textUI.printtoTextUI(
-                            f"\nYou currently have these items in your inventory: {self.ship.inventory}")
-                        if len(self.currentPlanet.items) != 0:
-                            self.textUI.printtoTextUI(
-                                f"The items found on this planet are {self.currentPlanet.items}\n")
-                            for i in self.currentPlanet.items:
-                                acceptItem = input(
-                                    f"Do you want to add {i} in your inventory? Yes or No : ")
-                                if acceptItem.lower() == "yes":
-                                    self.ship.addItem(i)
-                    else:
-                        self.textUI.printtoTextUI(
-                            "You don't have the key to go pluto")
-                else:
+                            f"\nFuel found. {hops} hop/s added.")
+                        hops = 0
                     self.textUI.printtoTextUI(
                         f'You have {self.ship.hops} hops remaining!')
-                    self.currentPlanet = nextPlanet
                     self.textUI.printtoTextUI(
-                        self.currentPlanet.getLongDescription())
-                    self.textUI.printtoTextUI(
-                        f"\nYou currently have these items in your inventory: {self.ship.inventory}")
+                        f"You currently have these items in your inventory: {self.ship.inventory}")
                     if len(self.currentPlanet.items) != 0:
                         self.textUI.printtoTextUI(
-                            f"The items found on this planet are {self.currentPlanet.items}\n")
+                            f"There are few items found on this planet: {self.currentPlanet.items}\n")
                         for i in self.currentPlanet.items:
                             acceptItem = input(
                                 f"Do you want to add {i} in your inventory? Yes or No : ")
-
                             if acceptItem.lower() == "yes":
                                 self.ship.addItem(i)
-
+                    self.textUI.printtoTextUI(
+                        self.currentPlanet.getLongDescription())
                     if self.currentPlanet.getName() == "Earth":
                         self.textUI.printtoTextUI(
                             'You have found the Metaverse Orb.')
-                        if "orbHolder" in self.ship.inventory:
-                            endGame = True
-                        else:
-                            self.textUI.printtoTextUI(
-                                "You do not have the orb holder. You need to find it on one of the planets")
+                        endGame = True
+                else:
+                    self.textUI.printtoTextUI(
+                        'You do not have the following required items to enter the planet.')
+                    self.textUI.printtoTextUI(requiredItems[nextPlanet.getName()])
+                    self.textUI.printtoTextUI(f'Your exits are: {self.currentPlanet.getExits()}')
         return endGame
 
 

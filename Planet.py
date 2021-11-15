@@ -7,17 +7,22 @@
 
 class Planet:
 
-    def __init__(self, description, name):
+    def __init__(self, description, name, items, hops):
         """
             Constructor method
         :param description: text description for this room
         """
         self.description = description
         self.name = name
-        self.exits = {}     # Dictionary
+        self.exits = {}
+        self.items = items
+        self.hops = hops
 
     def setExit(self, planetName, neighbour):
         self.exits[planetName] = neighbour
+
+    def getItems(self):
+        return self.items
 
     def getShortDescription(self):
         return self.description

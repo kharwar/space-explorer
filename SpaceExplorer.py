@@ -1,5 +1,5 @@
 from Planet import Planet
-from Player import Player
+from Ship import Ship
 from TextUI import TextUI
 
 """
@@ -18,7 +18,8 @@ class Game:
         Initializes the game
         """
         self.createPlanets()
-        self.player = Player('Starlord')
+        shipName = input("Please enter the name of your ship: ")
+        self.ship = Ship(shipName)
         self.currentPlanet = self.worlorm
         self.textUI = TextUI()
 
@@ -27,20 +28,33 @@ class Game:
             Sets up all Planet
         :return: None
         """
-        self.worlorm = Planet("You are on the Worlorm Planet", "Worlorm")
+        self.worlorm = Planet(
+            "You are on the Worlorm Planet", "Worlorm", [], 0)
         self.cybertron = Planet(
-            "These is a planet of Robots be Carefull and make friendship wisely", "Cybertron")
+            "These is a planet of Robots be Carefull and make friendship wisely", "Cybertron", [], 0)
         self.ego = Planet(
-            "These is a planet of a living tribual its not the safe planet", "Ego")
-        self.krypton = Planet("This planet is going to die soon", "Krypton")
-        self.solaris = Planet("You have safely landed to Solaris", "Solaris")
-        self.titan = Planet("This planet is where thanos lives", "Titan")
+            "These is a planet of a living tribual its not the safe planet", "Ego", [], 0)
+        self.krypton = Planet(
+            "This planet is going to die soon", "Krypton", [], 1)
+        self.solaris = Planet(
+            "You have safely landed to Solaris", "Solaris", [], 0)
+        self.titan = Planet(
+            "This planet is where thanos lives", "Titan", [], 0)
         self.dagobah = Planet(
-            "This planet is well known planet of star Wars", "Dagobah")
+            "This planet is well known planet of star Wars", "Dagobah", [], 0)
         self.vormir = Planet(
-            "This is the planet where you can get super powers", "Vormir")
+            "This is the planet where you can get super powers", "Vormir", [], 1)
         self.knowhere = Planet(
-            "This is the last planet where you can reach your destination", "Knowhere")
+            "This is the home of the mining colony of Exitar.", "Knowhere", [], 0)
+        self.earth = Planet(
+            "This is the last planet where you can reach your destination", "Earth", [], 0)
+        self.xander = Planet(
+            "", "Xander", [], 0)
+        self.asgard = Planet(
+            "", "Asgard", [], 0)
+        self.pluto = Planet(
+            "", "Pluto", ["orbHolder"], 0
+        )
 
         self.worlorm.setExit("cybertron", self.cybertron)
         self.worlorm.setExit("ego", self.ego)
@@ -52,6 +66,7 @@ class Game:
         self.cybertron.setExit("dagobah", self.dagobah)
         self.dagobah.setExit("cybertron", self.cybertron)
         self.dagobah.setExit("solaris", self.solaris)
+        self.dagobah.setExit('asgard', self.asgard)
         self.titan.setExit("ego", self.ego)
         self.titan.setExit("vormir", self.vormir)
         self.krypton.setExit("cybertron", self.cybertron)
@@ -60,12 +75,23 @@ class Game:
         self.krypton.setExit("ego", self.ego)
         self.solaris.setExit("dagobah", self.dagobah)
         self.solaris.setExit("krypton", self.krypton)
-        self.solaris.setExit("down", self.knowhere)
-        self.vormir.setExit("knowhere", self.krypton)
+        self.solaris.setExit("knowhere", self.knowhere)
+        self.solaris.setExit("xander", self.xander)
+        self.vormir.setExit("krypton", self.krypton)
         self.vormir.setExit("titan", self.titan)
         self.vormir.setExit("knowhere", self.knowhere)
         self.knowhere.setExit("solaris", self.solaris)
         self.knowhere.setExit("vormir", self.vormir)
+        self.knowhere.setExit("earth", self.earth)
+        self.asgard.setExit("dagobah", self.dagobah)
+        self.asgard.setExit("xander", self.xander)
+        self.asgard.setExit("pluto", self.pluto)
+        self.pluto.setExit("asgard", self.asgard)
+        self.xander.setExit("solaris", self.solaris)
+        self.xander.setExit("asgard", self.asgard)
+        self.xander.setExit("earth", self.earth)
+        self.earth.setExit("knowhere", self.knowhere)
+        self.earth.setExit("xander", self.xander)
 
     def play(self):
         """
@@ -141,13 +167,59 @@ class Game:
         endGame = False
         nextPlanet = self.currentPlanet.getExit(secondWord)
         if nextPlanet == None:
-            self.textUI.printtoTextUI("There is no door!")
+            self.textUI.printtoTextUI("There is no such planet!")
         else:
-            self.currentPlanet = nextPlanet
-            self.textUI.printtoTextUI(self.currentPlanet.getLongDescription())
-            if self.currentPlanet.getName() == "Knowhere":
-                self.textUI.printtoTextUI('You have found the Metaverse Orb.')
+            self.ship.subHops()
+            if self.ship.hops == 0:
+                self.textUI.printtoTextUI("You don't have any hops left!")
                 endGame = True
+            else:
+                if nextPlanet.name == "Pluto":
+                    if "key" in self.ship.inventory:
+                        self.textUI.printtoTextUI(
+                            f'You have {self.ship.hops} hops remaining!')
+                        self.currentPlanet = nextPlanet
+                        self.textUI.printtoTextUI(
+                            self.currentPlanet.getLongDescription())
+                        self.textUI.printtoTextUI(
+                            f"\nYou currently have these items in your inventory: {self.ship.inventory}")
+                        if len(self.currentPlanet.items) != 0:
+                            self.textUI.printtoTextUI(
+                                f"The items found on this planet are {self.currentPlanet.items}\n")
+                            for i in self.currentPlanet.items:
+                                acceptItem = input(
+                                    f"Do you want to add {i} in your inventory? Yes or No : ")
+                                if acceptItem.lower() == "yes":
+                                    self.ship.addItem(i)
+                    else:
+                        self.textUI.printtoTextUI(
+                            "You don't have the key to go pluto")
+                else:
+                    self.textUI.printtoTextUI(
+                        f'You have {self.ship.hops} hops remaining!')
+                    self.currentPlanet = nextPlanet
+                    self.textUI.printtoTextUI(
+                        self.currentPlanet.getLongDescription())
+                    self.textUI.printtoTextUI(
+                        f"\nYou currently have these items in your inventory: {self.ship.inventory}")
+                    if len(self.currentPlanet.items) != 0:
+                        self.textUI.printtoTextUI(
+                            f"The items found on this planet are {self.currentPlanet.items}\n")
+                        for i in self.currentPlanet.items:
+                            acceptItem = input(
+                                f"Do you want to add {i} in your inventory? Yes or No : ")
+
+                            if acceptItem.lower() == "yes":
+                                self.ship.addItem(i)
+
+                    if self.currentPlanet.getName() == "Earth":
+                        self.textUI.printtoTextUI(
+                            'You have found the Metaverse Orb.')
+                        if "orbHolder" in self.ship.inventory:
+                            endGame = True
+                        else:
+                            self.textUI.printtoTextUI(
+                                "You do not have the orb holder. You need to find it on one of the planets")
         return endGame
 
 

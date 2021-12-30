@@ -3,6 +3,7 @@
     Adventure World game
 """
 
+
 class TextUI:
 
     def __init__(self):
